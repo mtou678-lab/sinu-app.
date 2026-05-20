@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SINU SYNDICATE - GLOBAL OPERATIONS CENTER</title>
+    <style>
+        /* نظام التنسيق المظلم المتقدم */
+        :root { 
+            --main: #0c0d10; 
+            --accent: #ff3e3e; 
+            --gold: #f39c12; 
+            --text: #ffffff;
+            --panel-bg: #14171f;
+            --border-color: #262936;
+        }
+        
+        body { 
+            background: var(--main); 
+            color: var(--text); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 15px; 
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* محرك تأثيرات المطر التكتيكي */
+        #storm-layer { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 1; 
+            pointer-events: none; 
+        }
+        .drop { 
+            position: absolute; 
+            background: rgba(255, 62, 62, 0.15); 
+            width: 1px; 
+            height: 25px; 
+            animation: rain 0.8s linear infinite; 
+        }
+        @keyframes rain { 
+            0% { transform: translateY(-100%); } 
+            100% { transform: translateY(100vh); } 
+        }
+
+        header {
+            text-align: center;
+            padding: 25px 0;
+            border-bottom: 2px solid var(--accent);
+            margin-bottom: 25px;
+        }
+        h1 {
+            color: var(--accent);
+            margin: 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 26px;
+        }
+        
+        .tactical-polygon-logo {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto;
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            background-image: url('https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=300&q=80');
+            background-size: cover;
+            background-position: center;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 25px rgba(255, 62, 62, 0.7);
+            transition: transform 0.3s ease;
+        }
+        .tactical-polygon-logo:hover { transform: scale(1.05) rotate(5deg); }
+
+        .btn-connect {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 12px rgba(255, 62, 62, 0.4);
+            margin-top: 15px;
+        }
+        .btn-connect:hover {
+            background-color: #cc0000;
+            box-shadow: 0 0 22px rgba(255, 62, 62, 0.7);
+        }
+
+        /* شبكة المؤشرات الحيوية والإحصائيات السيادية */
+        .stat-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+            margin-bottom: 25px; 
+        }
+        @media (min-width: 768px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        .big-panel { 
+            background: rgba(20, 23, 31, 0.9); 
+            border: 1px solid var(--border-color); 
+            border-radius: 6px; 
+            padding: 15px; 
+            text-align: center;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        .stat-title { font-size: 11px; color: #8a92a6; margin-bottom: 5px; font-weight: bold; }
+        .stat-value { font-size: 16px; font-weight: bold; color: var(--text); }
+
+        /* المؤشرات الحيوية الرقمية */
+        .vitals-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .vital-box {
+            background: rgba(21, 24, 31, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+        .vital-label { font-size: 11px; color: #8a92a6; margin-bottom: 6px; font-weight: bold; }
+        .vital-bar-bg { background: #262a36; height: 10px; border-radius: 5px; overflow: hidden; }
+        .vital-bar-fill { height: 100%; transition: width 0.4s ease; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 768px) { .grid { grid-template-columns: 1fr 1fr; } }
+        
+        .card {
+            background-color: rgba(20, 23, 31, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+        }
+        .card h2 {
+            color: var(--accent);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            font-size: 18px;
+        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; color: #b0b7c6; font-size: 13px; }
+        input, select {
+            width: 100%;
+            padding: 11px;
+            background-color: #1e222e;
+            border: 1px solid #363c52;
+            color: white;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .btn-action {
+            background-color: #1e222e;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            width: 100%;
+            padding: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .btn-action:hover { background-color: var(--accent); color: white; }
+
+        .simulation-screen {
+            background: #000000;
+            border: 2px solid #363c52;
+            border-radius: 6px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .screen-img { width: 100%; height: 200px; object-fit: cover; opacity: 0.7; }
+        .screen-overlay-label {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 62, 62, 0.85);
+            color: white;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 3px;
+        }
+        .narrator-box {
+            padding: 15px;
+            background: #11141c;
+            border-top: 1px solid var(--border-color);
+            font-size: 13px;
+            line-height: 1.6;
+            color: #d1d8e5;
+        }
+
+        .shop-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1d212c;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 3px solid var(--accent);
+        }
+
+        /* سجل العمليات المباشر البلوكشين */
+        .live-feed-box {
+            background-color: #08090d;
+            border: 1px dashed var(--accent);
+            border-radius: 5px;
+            padding: 10px;
+            height: 100px;
+            overflow-y: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            color: #2ecc71;
+        }
+        .feed-line { margin-bottom: 5px; border-bottom: 1px solid #15181f; padding-bottom: 3px; }
+
+        /* قاعة قيادة السنديكيت السرية للمالك */
+        #adminPanel {
+            display: none; 
+            border: 2px dashed var(--gold);
+            background: linear-gradient(145deg, #1a150e, #14171f);
+            margin-top: 25px;
+            box-shadow: 0 0 30px rgba(243, 156, 18, 0.2);
+        }
+        #adminPanel h2 { color: var(--gold); border-bottom: 1px solid var(--gold); }
+        .btn-admin {
+            background-color: #1e222e;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+        .btn-admin:hover { background-color: var(--gold); color: black; }
+    </style>
+</head>
+<body>
+
+<div id="storm-layer"></div>
+
+<div class="container">
+    <header>
+        <div class="tactical-polygon-logo"></div>
+        <h1>SINU Mafia Syndicate</h1>
+        <p>وحدة التخطيط والعمليات الميدانية الكبرى للمنظمة [OPERATIONAL STATUS: CRITICAL]</p>
+        <button class="btn-connect" id="connectBtn" onclick="connectWallet()">تأمين الاتصال وبث الهوية</button>
+    </header>
+
+    <div class="stat-grid">
+        <div class="big-panel">
+            <div class="stat-title">💰 خزنة العقد الذكي</div>
+            <div class="stat-value" id="contractBalance">Loading...</div>
+        </div>
+        <div class="big-panel">
+            <div class="stat-title">🎯 مهمات اليوم</div>
+            <div class="stat-value" style="color: var(--accent);">42</div>
+        </div>
+        <div class="big-panel">
+            <div class="stat-title">📡 المشغلون النشطون</div>
+            <div class="stat-value">12</div>
+        </div>
+        <div class="big-panel">
+            <div class="stat-title">🚨 مستوى التهديد</div>
+            <div class="stat-value" style="color: var(--accent); letter-spacing: 1px;">EXTREME</div>
+        </div>
+    </div>
+
+    <div class="vitals-container">
+        <div class="vital-box">
+            <div class="vital-label">🔋 طاقة المشغل (صحة)</div>
+            <div class="vital-bar-bg"><div class="vital-bar-fill" id="healthBar" style="width: 100%; background: #2ecc71;"></div></div>
+        </div>
+        <div class="vital-box">
+            <div class="vital-label">🛡️ درع النجاة التكتيكي</div>
+            <div class="vital-bar-bg"><div class="vital-bar-fill" id="shieldBar" style="width: 85%; background: #3498db;"></div></div>
+        </div>
+        <div class="vital-box">
+            <div class="vital-label">🚨 مستوى الرصد الفيدرالي</div>
+            <div class="vital-bar-bg"><div class="vital-bar-fill" id="wantedBar" style="width: 20%; background: #e74c3c;"></div></div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h2>🥊 لوحة العقود المفتوحة (PvP)</h2>
+            <div class="form-group">
+                <label>معرف عنوان محفظة العميل المستهدف (Target Address):</label>
+                <input type="text" id="targetAddress" placeholder="أدخل عنوان الهدف المستهدف للتتبع...">
+            </div>
+            <div class="form-group">
+                <label>رصد مكافأة التنفيذ المالي (من أرصدة اللعبة):</label>
+                <input type="number" id="bountyAmount" placeholder="حدد رصيد الغنيمة للقاتل المستأجر...">
+            </div>
+            <button class="btn-action" onclick="createBounty()">بث كود التصفية الفوري</button>
+        </div>
+
+        <div class="card">
+            <h2>🔫 مهمة تصفية خاطفة وسريعة (PvE)</h2>
+            <p>أرسل طلقة الموت اللحظي عبر مسار قطار الأنفاق السريع واختبر كفاءة مناوراتك القتالية لجني الغنائم.</p>
+            <p style="font-size: 13px; color: var(--accent); font-weight: bold;">طلب توقيع المحفظة لتنفيذ المعاملة</p>
+            
+            <div class="form-group">
+                <label>تحديد خطة الإخلاء والهروب التكتيكي السريع:</label>
+                <select id="escapeRoute">
+                    <option value="car">إخلاء عبر دراجة نارية رياضية متسللة</option>
+                    <option value="boat">هروب بحري عبر قارب سريع بالميناء</option>
+                    <option value="heli">إخلاء جوي حاسم عبر مروحية الأسطح</option>
+                </select>
+            </div>
+            <button class="btn-action" style="background-color: var(--accent); color: white;" onclick="executePve()">[إطلاق مهمة التصفية (PvE)]</button>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1;">
+            <h2>📺 رادار المراقبة التكتيكي والسيناريو الميداني المباشر</h2>
+            <div class="simulation-screen">
+                <div class="screen-overlay-label" id="overlayLabel">الرادار: حالة الاستعداد والترقب المفتوح</div>
+                <img class="screen-img" id="screenImg" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="Simulation state">
+                <div class="narrator-box" id="narratorText">
+                    🦅 <strong>الوضع الميداني الحالي:</strong> في انتظار إعطاء الأوامر العسكرية من المالك. شبكة الرادارات جاهزة، الأسلحة محشوة، والمنظمة في ترقب كامل لإشارة البدء المعززة بمحرك الطقس الافتراضي.
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1;">
+            <h2>🛰️ بث الأقمار الصناعية (سجل العمليات المشفرة الحي)</h2>
+            <div class="live-feed-box" id="liveFeed">
+                <div class="feed-line">[نظام الأمان]: الرادار يمسح شبكة Base الآن... متصل وثابت تحت بروتوكول المطر التكتيكي.</div>
+            </div>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1;">
+            <h2>🛒 متجر التجهيزات والترسانة (Survival Shop)</h2>
+            <div class="shop-item">
+                <div>
+                    <strong>حقنة الأدرينالين لإنعاش الطاقة والمواصلة (Adrenaline)</strong>
+                    <div style="font-size: 12px; color: #aaa;">شراء عتاد تكتيكي مباشر من العقد</div>
+                </div>
+                <button class="btn-connect" style="padding: 5px 15px; font-size: 13px; margin: 0;" onclick="buyItem(1)">تجهيز فوري</button>
+            </div>
+            <div class="shop-item">
+                <div>
+                    <strong>قنبلة الدخان للهروب والتواري عن الأنظار (Smoke Bomb)</strong>
+                    <div style="font-size: 12px; color: #aaa;">شراء عتاد تكتيكي مباشر من العقد</div>
+                </div>
+                <button class="btn-connect" style="padding: 5px 15px; font-size: 13px; margin: 0;" onclick="buyItem(2)">تجهيز فوري</button>
+            </div>
+        </div>
+
+        <div class="card" id="adminPanel" style="grid-column: 1 / -1;">
+            <h2>👑 قاعة قيادة السنديكيت السرية (Owner Dashboard)</h2>
+            <p style="color: var(--gold); font-size: 13px;">تنبيه: أنت في الوضع الإداري السيادي. لا تقم بأي إجراء يهدد توازن الإمبراطورية.</p>
+            <div class="grid" style="grid-template-columns: 1fr; gap: 10px;">
+                <div>
+                    <label>تصفية الأرباح السيادية المجمعة في العقد إلى محفظتك المباشرة:</label>
+                    <button class="btn-action btn-admin" onclick="ownerWithdraw()">تصفية الأرباح السيادية 💰</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // محرك العاصفة والمطر البرمجي المتقدم
+    const stormLayer = document.getElementById('storm-layer');
+    for(let i = 0; i < 60; i++) {
+        const drop = document.createElement('div'); 
+        drop.className = 'drop';
+        drop.style.left = Math.random() * 100 + '%'; 
+        drop.style.animationDelay = Math.random() * 2 + 's';
+        drop.style.animationDuration = (0.5 + Math.random() * 0.5) + 's';
+        stormLayer.appendChild(drop);
+    }
+
+    function playSyndicateSound(type) {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if(type === 'gunshot') {
+            let bufferSize = audioCtx.sampleRate * 0.5,
+                buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate),
+                data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+            let noise = audioCtx.createBufferSource(); noise.buffer = buffer;
+            let filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(400, audioCtx.currentTime);
+            let gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination); noise.start();
+        } else if(type === 'mechanical') {
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'square'; osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+        }
+    }
+
+    function addLog(text) {
+        const feed = document.getElementById("liveFeed");
+        const time = new Date().toLocaleTimeString();
+        feed.innerHTML += `<div class="feed-line">[${time}] ${text}</div>`;
+        feed.scrollTop = feed.scrollHeight;
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js" type="text/javascript"></script>
+
+<script>
+    // المتغيرات والبيانات الأساسية للعقد الذكي المربوط حقيقياً وعملياً
+    const contractAddress = "0x3E71427c4F4c3aE6DBA472Ccb17076E2148A1231"; 
+    const contractABI = [
+        {
+            "inputs": [
+                { "internalType": "address", "name": "_sinuTokenAddress", "type": "address" }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "inputs": [
+                { "internalType": "address", "name": "_target", "type": "address" },
+                { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+            ],
+            "name": "createBountyChallenge",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "executePveAssassination",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                { "internalType": "uint256", "name": "_itemType", "type": "uint256" }
+            ],
+            "name": "buySurvivalItem",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
+                { "internalType": "address", "name": "", "type": "address" }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        }
+    ];
+
+    let provider; let signer; let contract;
+
+    // تحديث رصيد العقد الظاهر في اللوحة العلوية الإحصائية
+    async function updateContractBalance() {
+        if (provider && contractAddress) {
+            try {
+                const balance = await provider.getBalance(contractAddress);
+                const ethBalance = ethers.utils.formatEther(balance);
+                document.getElementById("contractBalance").innerText = parseFloat(ethBalance).toFixed(4) + " ETH";
+            } catch (e) {
+                document.getElementById("contractBalance").innerText = "0.00 ETH";
+            }
+        }
+    }
+
+    async function connectWallet() {
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                playSyndicateSound('mechanical');
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const currentWallet = accounts[0];
+                
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                contract = new ethers.Contract(contractAddress, contractABI, signer);
+                
+                const shortAddress = currentWallet.substring(0, 6) + "..." + currentWallet.substring(currentWallet.length - 4);
+                document.getElementById("connectBtn").innerText = `المشغل متصل: ${shortAddress}`;
+                document.getElemen
